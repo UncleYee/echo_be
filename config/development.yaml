@@ -1,0 +1,7 @@
+server:
+  port: :8000
+db:
+  type: mongo
+  url: xxxx
+  db: echo
+  port: 27017
