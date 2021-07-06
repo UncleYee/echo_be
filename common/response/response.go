@@ -1,27 +1,29 @@
 package response
 
 // 成功
-func Success(data map[string]interface{}) map[string]interface{} {
+var Success = map[string]interface{}{
+	"code":    0,
+	"message": "成功",
+}
+
+// 系统错误
+var SystemError = map[string]interface{}{
+	"code":    -1,
+	"message": "系统错误",
+}
+
+// 未登录
+var NotLogin = map[string]interface{}{
+	"code":    1024,
+	"message": "未登录",
+}
+
+// 成功
+func SuccessWithData(data map[string]interface{}) map[string]interface{} {
 	return map[string]interface{}{
 		"code":    0,
 		"message": "成功",
 		"data":    data,
-	}
-}
-
-// 系统错误
-func SystemErrpr() map[string]interface{} {
-	return map[string]interface{}{
-		"code":    -1,
-		"message": "系统错误",
-	}
-}
-
-// 未登录
-func NotLogin() map[string]interface{} {
-	return map[string]interface{}{
-		"code":    1024,
-		"message": "未登录",
 	}
 }
 
