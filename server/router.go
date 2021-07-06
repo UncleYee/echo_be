@@ -2,6 +2,7 @@ package server
 
 import (
 	"echo/common/response"
+	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
@@ -13,20 +14,20 @@ func NewRouter() *gin.Engine {
 	router.Use(gin.Logger())
 	router.Use(gin.Recovery())
 
-	api := router.Group("api")
+	api := router.Group("/api")
 
 	// 健康检查
 	api.GET("/health", func(c *gin.Context) {
-		c.String(200, "ok")
+		c.String(http.StatusOK, "ok")
 	})
 
-	userApi := api.Group("/user")
+	userRoutes := api.Group("/user")
 	{
-		userApi.GET("/login", func(c *gin.Context) {
-			c.String(200, "login")
+		userRoutes.GET("/login", func(c *gin.Context) {
+			c.String(http.StatusOK, "login")
 		})
-		userApi.POST("register", func(c *gin.Context) {
-			c.JSON(200, response.Success(map[string]interface{}{}))
+		userRoutes.POST("register", func(c *gin.Context) {
+			c.JSON(http.StatusOK, response.Success)
 		})
 	}
 
