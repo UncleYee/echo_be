@@ -23,6 +23,6 @@ func main() {
 	config.Init(*env)
 	// 初始化数据库
 	db.Setup()
-	// 启动服务
+	// 初始化服务
 	server.Init()
 }
