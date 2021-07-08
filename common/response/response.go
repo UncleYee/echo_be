@@ -1,44 +1,43 @@
 package response
 
-// 成功
-var Success = map[string]interface{}{
-	"code":    0,
-	"message": "成功",
+import (
+	"net/http"
+
+	"github.com/gin-gonic/gin"
+)
+
+type ResponseInfo struct {
+	Code    int         `json:"code"`
+	Message string      `json:"message"`
+	Data    interface{} `json:"data,omitempty"`
+	Detail  string      `json:"detail,omitempty"`
 }
 
-// 系统错误
-var SystemError = map[string]interface{}{
-	"code":    -1,
-	"message": "系统错误",
-}
+func response(ctx *gin.Context, data interface{}, err error) {
+	code := 0
+	message := "成功"
+	detail := ""
 
-// 未登录
-var NotLogin = map[string]interface{}{
-	"code":    1024,
-	"message": "未登录",
-}
+	if err != nil {
+		// TODO switch err.(type)
 
-// 成功
-func SuccessWithData(data map[string]interface{}) map[string]interface{} {
-	return map[string]interface{}{
-		"code":    0,
-		"message": "成功",
-		"data":    data,
+		code = 1001
+		message = "请求失败"
 	}
+
+	ctx.JSON(http.StatusOK, ResponseInfo{
+		Code:    code,
+		Message: message,
+		Data:    data,
+		Detail:  detail,
+	})
+
 }
 
-// 参数校验失败
-func ValidateParamFailed(msg string) map[string]interface{} {
-	return map[string]interface{}{
-		"code":    1001,
-		"message": "参数校验失败，" + msg,
-	}
+func Success(ctx *gin.Context, data interface{}) {
+	response(ctx, data, nil)
 }
 
-// 通用型校验错误
-func CodeMsgWithDetail(msg string) map[string]interface{} {
-	return map[string]interface{}{
-		"code":    1002,
-		"message": msg,
-	}
+func Fail(ctx *gin.Context, err error) {
+	response(ctx, nil, err)
 }

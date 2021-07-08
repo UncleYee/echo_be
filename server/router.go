@@ -2,34 +2,32 @@ package server
 
 import (
 	"echo/common/response"
+	"echo/controllers"
 	"net/http"
 
 	"github.com/gin-gonic/gin"
 )
 
-func NewRouter() *gin.Engine {
-	router := gin.New()
-
-	// 中间件
-	router.Use(gin.Logger())
-	router.Use(gin.Recovery())
-
+func registerRoutes(router *gin.Engine) {
 	api := router.Group("/api")
 
 	// 健康检查
-	api.GET("/health", func(c *gin.Context) {
-		c.String(http.StatusOK, "ok")
+	api.GET("/health", func(ctx *gin.Context) {
+		ctx.String(http.StatusOK, "ok")
 	})
+
+	testRoutes := api.Group("/test")
+	{
+		testRoutes.GET("/get/:param", controllers.TestGet)
+	}
 
 	userRoutes := api.Group("/user")
 	{
-		userRoutes.GET("/login", func(c *gin.Context) {
-			c.String(http.StatusOK, "login")
+		userRoutes.GET("/login", func(ctx *gin.Context) {
+			response.Success(ctx, nil)
 		})
-		userRoutes.POST("register", func(c *gin.Context) {
-			c.JSON(http.StatusOK, response.Success)
+		userRoutes.POST("/register", func(ctx *gin.Context) {
+			response.Success(ctx, nil)
 		})
 	}
-
-	return router
 }

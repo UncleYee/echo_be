@@ -1,5 +1,5 @@
 server:
-  port: :8000
+  port: localhost:8000
 db:
   type: mongo
   url: xxxx
